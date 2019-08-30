@@ -14,7 +14,6 @@ class MidgarSession extends Plugin {
   async init() {
     //set session config
     this._config = utils.assignRecursive({
-      store: 'sequelize',
       resave: false,
       rolling: false,
       cookie: {},
@@ -101,8 +100,10 @@ class MidgarSession extends Plugin {
    * Return the session storage
    */
   async _getStore() {
-    const storeCallback = await this.getStore(this._config.store)
+    if (!this._config.store)
+      return null
 
+    const storeCallback = await this.getStore(this._config.store)
     return storeCallback(this.midgar)
   }
 }
